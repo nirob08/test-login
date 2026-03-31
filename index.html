@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Registration</title>
+    <style>
+        :root {
+            --fb-blue: #1877f2;
+            --fb-light: #f0f2f5;
+            --card: #ffffff;
+            --text: #050505;
+            --muted: #65676b;
+            --danger: #d93025;
+            --success: #16a34a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #e9f2ff 0%, #d6e9ff 45%, #f3f6fb 100%);
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            width: min(100%, 980px);
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .brand-panel {
+            padding: 2rem;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #dbe8ff;
+        }
+
+        .brand-panel h1 {
+            margin: 0 0 1rem;
+            color: var(--fb-blue);
+            font-size: clamp(2rem, 3.5vw, 2.3rem);
+        }
+
+        .brand-panel p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .auth-panel {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border: 1px solid #dbe8ff;
+            padding: 1.5rem;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--fb-light);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--muted);
+            background: transparent;
+            transition: background-color .2s, color .2s;
+        }
+
+        .tab-btn.active {
+            background: var(--card);
+            color: var(--fb-blue);
+            box-shadow: inset 0 -3px 0 var(--fb-blue);
+        }
+
+        .form-block { display: none; }
+        .form-block.active { display: block; }
+
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label { display: block; margin-bottom: 0.32rem; font-weight: 600; color: #12212e; }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .form-group input:focus { border-color: var(--fb-blue); box-shadow: 0 0 0 3px rgba(24,119,242,0.2); outline: none; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 700;
+            background: linear-gradient(145deg, #3b74d3, #2a5db5);
+            cursor: pointer;
+            transition: transform .15s, filter .2s;
+            min-height: 48px;
+        }
+
+        .submit-btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); }
+
+        #message {
+            min-height: 24px;
+            margin-top: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .error { color: #bd1e2f; background: #ffe6e9; border: 1px solid #f1a1b0; border-radius: 7px; padding: 8px 10px; }
+        .success { color: #1f8c46; background: #e6f6ec; border: 1px solid #8fd2a8; border-radius: 7px; padding: 8px 10px; }
+
+        .small-text {
+            margin-top: 0.6rem;
+            font-size: 0.88rem;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 860px) {
+            .container { grid-template-columns: 1fr; }
+            .brand-panel { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="brand-panel">
+            <h1>BlueSocial</h1>
+            <p>Fast, secure login and registration UI inspired by Facebook design. Switch between Login and Register in one place.</p>
+        </section>
+
+        <section class="auth-panel">
+            <div class="tabs">
+                <button id="tab-login" class="tab-btn active" type="button">Log In</button>
+                <button id="tab-register" class="tab-btn" type="button">Sign Up</button>
+            </div>
+
+            <div id="login-block" class="form-block active">
+                <form id="login-form">
+                    <div class="form-group"><label for="login-user">Email or Phone</label><input id="login-user" name="loginUser" type="text" placeholder="Enter email or phone"></div>
+                    <div class="form-group"><label for="login-pass">Password</label><input id="login-pass" name="loginPass" type="password" placeholder="Password"></div>
+                    <button type="submit" class="submit-btn">Log In</button>
+                    <div id="login-message"></div>
+                </form>
+            </div>
+
+            <div id="register-block" class="form-block">
+                <form id="register-form">
+                    <div class="form-group"><label for="reg-name">Full Name</label><input id="reg-name" name="regName" type="text" placeholder="Full name"></div>
+                    <div class="form-group"><label for="reg-email">Email</label><input id="reg-email" name="regEmail" type="email" placeholder="Email address"></div>
+                    <div class="form-group"><label for="reg-pass">Password</label><input id="reg-pass" name="regPass" type="password" placeholder="Create password"></div>
+                    <button type="submit" class="submit-btn">Create Account</button>
+                    <div id="register-message"></div>
+                </form>
+            </div>
+
+            <p class="small-text">By continuing, you agree to our Terms and Privacy policy.</p>
+        </section>
+    </div>
+
+    <script>
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const loginBlock = document.getElementById('login-block');
+        const registerBlock = document.getElementById('register-block');
+
+        function setActive(tabButton) {
+            tabLogin.classList.remove('active');
+            tabRegister.classList.remove('active');
+            loginBlock.classList.remove('active');
+            registerBlock.classList.remove('active');
+
+            if (tabButton === 'login') {
+                tabLogin.classList.add('active');
+                loginBlock.classList.add('active');
+            } else {
+                tabRegister.classList.add('active');
+                registerBlock.classList.add('active');
+            }
+        }
+
+        tabLogin.addEventListener('click', () => setActive('login'));
+        tabRegister.addEventListener('click', () => setActive('register'));
+
+        function showMessage(container, text, type) {
+            container.textContent = text;
+            container.className = type;
+            clearTimeout(container._timer);
+            container._timer = setTimeout(() => {
+                container.textContent = '';
+                container.className = '';
+            }, 3500);
+        }
+
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        const loginMsg = document.getElementById('login-message');
+        const registerMsg = document.getElementById('register-message');
+
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const user = this.loginUser.value.trim();
+            const pass = this.loginPass.value.trim();
+
+            if (!user || !pass) {
+                showMessage(loginMsg, 'Please enter email/phone and password.', 'error');
+                if (!user) this.loginUser.focus(); else this.loginPass.focus();
+                return;
+            }
+
+            if (user === 'test@example.com' && pass === '1234') {
+                showMessage(loginMsg, 'Logged in successfully!', 'success');
+                this.reset();
+            } else {
+                showMessage(loginMsg, 'Credentials not recognized.', 'error');
+                this.loginPass.value = ''; this.loginPass.focus();
+            }
+        });
+
+        registerForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const name = this.regName.value.trim();
+            const email = this.regEmail.value.trim();
+            const pass = this.regPass.value.trim();
+
+            if (!name || !email || !pass) {
+                showMessage(registerMsg, 'All fields are required to create an account.', 'error');
+                if (!name) this.regName.focus(); else if (!email) this.regEmail.focus(); else this.regPass.focus();
+                return;
+            }
+
+            if (pass.length < 6) {
+                showMessage(registerMsg, 'Password must be at least 6 characters.', 'error');
+                this.regPass.focus();
+                return;
+            }
+
+            showMessage(registerMsg, 'Account created successfully! Please log in.', 'success');
+            this.reset();
+            setActive('login');
+            setTimeout(() => document.getElementById('login-user').focus(), 10);
+        });
+    </script>
+</body>
+</html>
