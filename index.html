@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login / Registration</title>
+    <title>Nirob Login / Registration</title>
     <style>
         :root {
             --fb-blue: #1877f2;
@@ -151,7 +151,7 @@
 <body>
     <div class="container">
         <section class="brand-panel">
-            <h1>BlueSocial</h1>
+            <h1>Nirob Login</h1>
             <p>Fast, secure login and registration UI inspired by Facebook design. Switch between Login and Register in one place.</p>
         </section>
 
@@ -163,6 +163,7 @@
 
             <div id="login-block" class="form-block active">
                 <form id="login-form">
+                    <div class="form-group"><label for="login-name">Name</label><input id="login-name" name="loginName" type="text" placeholder="Your name"></div>
                     <div class="form-group"><label for="login-user">Email or Phone</label><input id="login-user" name="loginUser" type="text" placeholder="Enter email or phone"></div>
                     <div class="form-group"><label for="login-pass">Password</label><input id="login-pass" name="loginPass" type="password" placeholder="Password"></div>
                     <button type="submit" class="submit-btn">Log In</button>
@@ -226,17 +227,18 @@
 
         loginForm.addEventListener('submit', function (event) {
             event.preventDefault();
+            const name = this.loginName.value.trim();
             const user = this.loginUser.value.trim();
             const pass = this.loginPass.value.trim();
 
-            if (!user || !pass) {
-                showMessage(loginMsg, 'Please enter email/phone and password.', 'error');
-                if (!user) this.loginUser.focus(); else this.loginPass.focus();
+            if (!name || !user || !pass) {
+                showMessage(loginMsg, 'Please enter name, email/phone and password.', 'error');
+                if (!name) this.loginName.focus(); else if (!user) this.loginUser.focus(); else this.loginPass.focus();
                 return;
             }
 
             if (user === 'test@example.com' && pass === '1234') {
-                showMessage(loginMsg, 'Logged in successfully!', 'success');
+                showMessage(loginMsg, `Logged in successfully! Welcome, ${name}.`, 'success');
                 this.reset();
             } else {
                 showMessage(loginMsg, 'Credentials not recognized.', 'error');
